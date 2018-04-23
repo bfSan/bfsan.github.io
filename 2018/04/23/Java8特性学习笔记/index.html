@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,note,笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java8特性学习笔记　　Java8中新增了许多的新特性，在这里本人研究学习了几个较为常用的特性，在这里与大家进行分享。（这里推荐深入理解Java 8用于理解基础知识）本文分为以下几个部分：  Lambda 表达式 方法引用 默认方法  函数接口 Function Stream  Optional API  Date Time API">
+<meta name="keywords" content="java,note,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8特性学习笔记">
+<meta property="og:url" content="http://yoursite.com/2018/04/23/Java8特性学习笔记/index.html">
+<meta property="og:site_name" content="薄枫">
+<meta property="og:description" content="Java8特性学习笔记　　Java8中新增了许多的新特性，在这里本人研究学习了几个较为常用的特性，在这里与大家进行分享。（这里推荐深入理解Java 8用于理解基础知识）本文分为以下几个部分：  Lambda 表达式 方法引用 默认方法  函数接口 Function Stream  Optional API  Date Time API">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i.imgur.com/DKbEgnF.png">
+<meta property="og:updated_time" content="2018-04-23T07:32:08.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8特性学习笔记">
+<meta name="twitter:description" content="Java8特性学习笔记　　Java8中新增了许多的新特性，在这里本人研究学习了几个较为常用的特性，在这里与大家进行分享。（这里推荐深入理解Java 8用于理解基础知识）本文分为以下几个部分：  Lambda 表达式 方法引用 默认方法  函数接口 Function Stream  Optional API  Date Time API">
+<meta name="twitter:image" content="http://i.imgur.com/DKbEgnF.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/23/Java8特性学习笔记/"/>
+
+
+
+
+
+  <title>Java8特性学习笔记 | 薄枫</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">薄枫</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">subtitle</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/23/Java8特性学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="薄枫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薄枫">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java8特性学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T10:56:01+08:00">
+                2018-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Java8特性学习笔记"><a href="#Java8特性学习笔记" class="headerlink" title="Java8特性学习笔记"></a>Java8特性学习笔记</h2><p>　　Java8中新增了许多的新特性，在这里本人研究学习了几个较为常用的特性，在这里与大家进行分享。（这里推荐<a href="http://lucida.me/blog/java-8-lambdas-insideout-language-features/" target="_blank" rel="noopener">深入理解Java 8</a>用于理解基础知识）本文分为以下几个部分：</p>
+<ul>
+<li>Lambda 表达式</li>
+<li>方法引用</li>
+<li>默认方法 </li>
+<li>函数接口</li>
+<li>Function</li>
+<li>Stream </li>
+<li>Optional API </li>
+<li>Date Time API<a id="more"></a>
+</li>
+</ul>
+<hr>
+<h3 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h3><p>Lambda 表达式，也可称为闭包。Lambda 允许把函数作为一个方法的参数（函数作为参数传递进方法中）。使用 Lambda 表达式可以使代码变的更加简洁紧凑。 Lambda表达式可以替代以前广泛使用的内部匿名类，各种回调，比如事件响应器、传入Thread类的Runnable等。</p>
+<h4 id="Lambda语法"><a href="#Lambda语法" class="headerlink" title="Lambda语法"></a>Lambda语法</h4><p>lambda 表达式的语法格式如下：  </p>
+<pre><code>(parameters) -&gt; expression  
+或  
+(parameters) -&gt;{ statements; }
+</code></pre><h4 id="Lambda表达式的特征"><a href="#Lambda表达式的特征" class="headerlink" title="Lambda表达式的特征"></a>Lambda表达式的特征</h4><ul>
+<li>类型声明（可选）：可以不需要声明参数类型，编译器会识别参数值。</li>
+<li>参数圆括号（可选）：在单个参数时可以不使用括号，多个参数时必须使用。</li>
+<li>大括号和return关键字（可选）：如果只有一个表达式，则可以省略大括号和return关键字，编译器会自动的返回值；相对的，在使用大括号的情况下，则必须指明返回值。</li>
+</ul>
+<h4 id="Lambda表达式例子"><a href="#Lambda表达式例子" class="headerlink" title="Lambda表达式例子"></a>Lambda表达式例子</h4><p>这里以常用的list排序功能为例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;People&gt; peopleList = <span class="keyword">new</span> ArrayList&lt;People&gt;();</span><br><span class="line">&#123;</span><br><span class="line">	peopleList.add(<span class="keyword">new</span> People(<span class="string">"a"</span>,<span class="number">17</span>));</span><br><span class="line">	peopleList.add(<span class="keyword">new</span> People(<span class="string">"b"</span>,<span class="number">16</span>));</span><br><span class="line">	peopleList.add(<span class="keyword">new</span> People(<span class="string">"c"</span>,<span class="number">19</span>));</span><br><span class="line">	peopleList.add(<span class="keyword">new</span> People(<span class="string">"d"</span>,<span class="number">15</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLambda</span><span class="params">()</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"排序前："</span>+peopleList);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第一种，传统匿名Compartor接口排序</span></span><br><span class="line">    Collections.sort(peopleList, <span class="keyword">new</span> Comparator&lt;People&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(People o1, People o2)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> o1.getAge().compareTo(o2.getAge());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    System.out.println(<span class="string">"匿名接口方法——排序后："</span>+peopleList);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第二种，使用Lambda表达式来代替匿名接口方法</span></span><br><span class="line">    <span class="comment">//1.声明式,不使用大括号，只可以写单条语句</span></span><br><span class="line">    Collections.sort(peopleList,(People a,People b)-&gt;a.getAge().compareTo(b.getAge()));</span><br><span class="line">    System.out.println(<span class="string">"Lambda表达式1、排序："</span>+peopleList);;</span><br><span class="line">    <span class="comment">//2.不声明式，使用大括号，可以写多条语句</span></span><br><span class="line">    Collections.sort(peopleList,(a,b)-&gt;&#123;</span><br><span class="line">        System.out.print(<span class="string">"——————————————"</span>);</span><br><span class="line">        <span class="keyword">return</span> a.getAge().compareTo(b.getAge());</span><br><span class="line">    &#125;);</span><br><span class="line">    System.out.println();</span><br><span class="line">    System.out.println(<span class="string">"Lambda表达式2、排序："</span>+peopleList);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第三种，使用Lambda表达式调用类的静态方法</span></span><br><span class="line">    Collections.sort(peopleList,(a,b)-&gt;People.sortByName(a,b));</span><br><span class="line">    System.out.println(<span class="string">"Lambda表达式调用静态方法："</span>+peopleList);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第四种，使用Lambda表达式调用类的实例方法</span></span><br><span class="line">    Collections.sort(peopleList,(a,b)-&gt;<span class="keyword">new</span> People().sortByAge(a,b));</span><br><span class="line">    System.out.println(<span class="string">"Lambda表达式调用实例方法:"</span>+peopleList);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对应的运行结果：<br><img src="http://i.imgur.com/DKbEgnF.png" alt=""><br>（<strong>注意</strong>：在Lambda表达式中只能对final的对象进行操作，声明的对象也为final）</p>
+<p>有的朋友应该已经观察到了，Lambda 表达式与C中的函数指针，JavaScript的匿名function均有些相似。其实，Lambda表达式本质上是一个匿名的方法，只不过它的目标类型必须是“函数接口（functional interface）”，这是Java8引入的新概念，在接下来会进行更加详细的介绍。 </p>
+<h3 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h3><p>在一些Lambda中可能只是单纯的调用方法，比如前例中的三、四，在这种情况下，就可以使用方法引用的方式来提高可读性。</p>
+<h4 id="方法引用的种类"><a href="#方法引用的种类" class="headerlink" title="方法引用的种类"></a>方法引用的种类</h4><ul>
+<li>类静态方法引用<br><code>Class::staticMethodName</code></li>
+<li>某个对象的方法引用<br><code>instance::instanceMethodName</code></li>
+<li>特定类的任意对象的方法引用：<br><code>Class::method</code></li>
+<li>构造方法引用：<br><code>Class::new</code></li>
+</ul>
+<h4 id="方法引用的例子"><a href="#方法引用的例子" class="headerlink" title="方法引用的例子"></a>方法引用的例子</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMethodReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="comment">//第一种，引用类的静态方法</span></span><br><span class="line">Collections.sort(peopleList, People::sortByName);</span><br><span class="line">System.out.println(<span class="string">"引用类的静态方法："</span> + peopleList);</span><br><span class="line"></span><br><span class="line"><span class="comment">//第二种，引用类的实例方法</span></span><br><span class="line">Collections.sort(peopleList, <span class="keyword">new</span> People()::sortByAge);</span><br><span class="line">System.out.println(<span class="string">"引用类的实例方法："</span> + peopleList);</span><br><span class="line"></span><br><span class="line"><span class="comment">//第三种，特定类的方法调用()</span></span><br><span class="line">Integer[] a = <span class="keyword">new</span> Integer[]&#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>&#125;;</span><br><span class="line">Arrays.sort(a, Integer::compare);</span><br><span class="line">System.out.println(<span class="string">"特定类的方法引用："</span> + Arrays.toString(a));</span><br><span class="line"></span><br><span class="line"><span class="comment">//第四种，引用类的构造器</span></span><br><span class="line">Car car = Car.create(Car::<span class="keyword">new</span>);</span><br><span class="line">System.out.println(<span class="string">"引用类的构造器:"</span> + car);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">create</span><span class="params">(Supplier&lt;Car&gt; supplier)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> supplier.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h3><p>在Java8之前的时代，为已存在接口增加一个通用的实现是十分困难的，接口一旦发布之后就等于定型，如果这时在接口内增加一个方法，那么就会破坏所有实现接口的对象。<br>默认方法（之前被称为 虚拟扩展方法 或 守护方法）的目标即是解决这个问题，使得接口在发布之后仍能被逐步演化。</p>
+<h4 id="默认方法（defalut）"><a href="#默认方法（defalut）" class="headerlink" title="默认方法（defalut）"></a>默认方法（defalut）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;</span><br><span class="line">      System.out.println(<span class="string">"我是一辆车!"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="静态方法（static）"><a href="#静态方法（static）" class="headerlink" title="静态方法（static）"></a>静态方法（static）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">vehicle</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">blowHorn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      System.out.println(<span class="string">"按喇叭!!!"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：静态方法与默认方法均可以有多个，默认方法可以被覆盖。</p>
+<h3 id="函数接口"><a href="#函数接口" class="headerlink" title="函数接口"></a>函数接口</h3><p>“函数接口（functional interface）”，就是除去默认方法以及继承的抽象方法，只有显式声明一个抽象方法的接口。它使用@FunctionalInterface注解在类上进行标注，也可以省略，Java会自动识别。接下来介绍一些常见的函数接口：</p>
+<h4 id="java-util-function-Predicate"><a href="#java-util-function-Predicate" class="headerlink" title="java.util.function.Predicate"></a>java.util.function.Predicate</h4><p>该接口包含方法boolean test(T t)，该接口一般用于条件的检测，内部包含三个默认方法：and、or、negate、，即与或非，用于各式的条件判断。例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;Integer&gt; predicate = x -&gt; x &gt; <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">predicate.test(<span class="number">10</span>);<span class="comment">//true</span></span><br><span class="line">predicate.negate().test(<span class="number">10</span>);<span class="comment">//false</span></span><br><span class="line">predicate.or(x -&gt; x &lt; <span class="number">1</span>).and(x -&gt; x &gt; -<span class="number">1</span>).negate().test(-<span class="number">1</span>);<span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>注意</strong>：在这里与或非的判断顺序是从左到右的,调用的顺序会影响结果。 </p>
+<h4 id="java-util-Comparator"><a href="#java-util-Comparator" class="headerlink" title="java.util.Comparator"></a>java.util.Comparator</h4><p>Comparator是Java中的经典接口，在排序中较为常用。Java8在此之上添加了一些新的默认方法，来丰富该接口的功能。例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Integer[] a = <span class="keyword">new</span> Integer[]&#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>&#125;;</span><br><span class="line">Comparator&lt;Integer&gt; comparator = Integer::compare;</span><br><span class="line"></span><br><span class="line">Arrays.sort(a, comparator);</span><br><span class="line">System.out.println(<span class="string">"升序："</span> + Arrays.toString(a));</span><br><span class="line"></span><br><span class="line">Arrays.sort(a,comparator.reversed());</span><br><span class="line">System.out.println(<span class="string">"降序："</span>+Arrays.toString(a));</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">升序：[1, 2, 3, 4, 5, 6]</span><br><span class="line">降序：[6, 5, 4, 3, 2, 1]</span><br></pre></td></tr></table></figure></p>
+<h4 id="java-util-function-Supplier"><a href="#java-util-function-Supplier" class="headerlink" title="java.util.function.Supplier"></a>java.util.function.Supplier</h4><p>该类只包含方法：<br>    <code>T get();</code><br>Supplier接口是在1.8中新出现的函数接口，用于支持函数式编程。它用于返回一个任意泛型的实例对象，与工厂的功能类似。</p>
+<h4 id="java-util-function-Consumer"><a href="#java-util-function-Consumer" class="headerlink" title="java.util.function.Consumer"></a>java.util.function.Consumer</h4><p>该接口表示一个接受单个输入参数并且没有返回值的操作。不像其他函数式接口，Consumer接口期望执行修改内容的操作。例如 ，我们需要一个批量修改People的方法，利用Predicate和Consumer就可以这么写<br>在People内增加updateMany方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List <span class="title">updateMany</span><span class="params">(List&lt;People&gt; peopleList, Predicate&lt;People&gt; predicate, Consumer&lt;People&gt; consumer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; peopleList.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (predicate.test(peopleList.get(i))) &#123;</span><br><span class="line">            consumer.accept(peopleList.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> peopleList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//批量修改，将age&lt;18的对象的age改为18</span></span><br><span class="line">People.updateMany(peopleList,</span><br><span class="line">        p -&gt; p.getAge() &lt; <span class="number">18</span>,</span><br><span class="line">        p -&gt; p.setAge(<span class="number">18</span>));</span><br><span class="line">System.out.println(<span class="string">"修改后的结果："</span> + peopleList);</span><br></pre></td></tr></table></figure></p>
+<p>通过这种方式，可以将内部的判断逻辑与修改代码放至外部调用，而将for、if等语句封装至内部，提高代码的可读性。</p>
+<p>其他的还有一些函数接口，如Runnable，InvocationHandler等，在这里就不阐述了。有兴趣的大家可以自行查询资料。Stream、Function、Optional也是函数接口，将在下面进行详细介绍。</p>
+<h3 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h3><h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>Java8提供的java.util.function包的核心函数接口有4个。  </p>
+<ul>
+<li>函数型T -&gt;R，完成参数类型T向结果类型R的转换和数据处理。核心函数接口Function  </li>
+<li>判断型T -&gt;boolean，核心函数接口Predicate  </li>
+<li>消费型T -&gt;void，核心函数接口Consumer  </li>
+<li>供给型void-&gt;T，核心函数接口Supplier </li>
+</ul>
+<p>Function接口是为Java8提供了函数式编程的基础，apply方法与Consumer的accept方法功能类似，但是提供了返回及类型转换的可能，功能更加强大；再通过andThen与compose方法可以使Function组成Function功能链，进行多级数据处理及转换。</p>
+<h4 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h4><ul>
+<li><p>R apply(T t) – 将Function对象应用到输入的参数上，然后返回计算结果。</p>
+</li>
+<li><p>default <v> Function&lt;T,V&gt; andThen(Function&lt;? super R,? extends V&gt; after) 返回一个先执行当前函数对象apply方法再执行after函数对象apply方法的函数对象。</v></p>
+</li>
+<li><p>default <v> Function&lt;T,V&gt; compose(Function&lt;? super V,? extends T&gt; before)返回一个先执行before函数对象apply方法再执行当前函数对象apply方法的函数对象。</v></p>
+</li>
+<li><p>static <t> Function&lt;T,T&gt; identity() 返回一个执行了apply()方法之后只会返回输入参数的函数对象。</t></p>
+</li>
+</ul>
+<h4 id="方法详解"><a href="#方法详解" class="headerlink" title="方法详解"></a>方法详解</h4><h5 id="apply："><a href="#apply：" class="headerlink" title="apply："></a>apply：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">R <span class="title">apply</span><span class="params">(T t)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>接收类型：T<br>返回类型：R<br>类型转换：T→R    </p>
+<p>Function接口的核心方法，可以执行任意的操作，且具有返回值。接收一个T类型的对象，在经过处理后，返回一个R类型的对象。主要功能为类型转换及数据处理。</p>
+<h5 id="compose"><a href="#compose" class="headerlink" title="compose:"></a>compose:</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;V, R&gt; <span class="title">compose</span><span class="params">(Function&lt;? <span class="keyword">super</span> V, ? extends T&gt; before)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(before);</span><br><span class="line">    <span class="keyword">return</span> (V v) -&gt; apply(before.apply(v));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接收类型：Function&lt;? super V, ? extends T&gt;<br>返回类型：Function&lt;V, R&gt;<br>类型转换：(V+)→(T-)→T→R<br>apply执行顺序：before→this </p>
+<p>此处“V+”指代“? super V”，表示包含V在内的V的任意父类；”T-“指代“? extends T”，表示包含T在内的T的任意子类。compose方法返回一个Function&lt;V,R&gt;，这个Function先执行before的apply方法，将V+类型的数据转换为T-类型，再将T-作为参数传递给this的apply方法，将T类型转换为R类型。<br>通过compose方法，可以在某个Function执行之前插入一个Function执行。由于返回类型依旧为Function，可以重复调用compose方法形成方法链。</p>
+<h5 id="andThen："><a href="#andThen：" class="headerlink" title="andThen："></a>andThen：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">default</span> &lt;V&gt; <span class="function">Function&lt;T, V&gt; <span class="title">andThen</span><span class="params">(Function&lt;? <span class="keyword">super</span> R, ? extends V&gt; after)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(after);</span><br><span class="line">    <span class="keyword">return</span> (T t) -&gt; after.apply(apply(t));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接收类型：Function&lt;? super R, ? extends V&gt;<br>返回类型：Function&lt;T, V&gt;<br>类型转换：T→R→(R+)→(V-)<br>apply执行顺序：this→after </p>
+<p>此处“R+”指代“? super R”，表示包含R在内的R的任意父类；”V-“指代“? extends V”，表示包含V在内的V的任意子类。andThen方法返回一个Function&lt;T,V&gt;，这个Function先执行this的apply方法，将T类型的数据转换为R类型，再将R作为参数传递给after的apply方法，将R+类型转换为V-类型。<br>通过andThen方法，可以在某个Function执行之后插入一个Function执行。由于返回类型依旧为Function，可以重复调用andThen方法形成方法链。</p>
+<h5 id="identity："><a href="#identity：" class="headerlink" title="identity："></a>identity：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &lt;T&gt; <span class="function">Function&lt;T, T&gt; <span class="title">identity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> t -&gt; t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接收类型：无<br>返回类型：Function&lt;T, T&gt;<br>类型转换：T→T</p>
+<p>该方法的说明是：返回一个函数，它总是返回输入参数。调用该方法可以得到一个返回输入参数的Funtion，这个Function就可以单纯的用来做数据处理，而不用类型转换。</p>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>Java8中提供了Stream API,即流式处理。可以通过将List、Set、Array等对象转换成流进行操作。Stream内的流操作分为两种：中间操作和最终操作，中间操作会返回一个<strong>全新的Stream对象</strong>，意味着你的操作不会影响最初的流；最终操作会将流进行转换或者操作，返回非Stream的对象。Stream可以替代传统的循环操作，从线程上区别，Stream分为串行（Stream）和并行（parallelStream），关于Stream的性能分析可以查看这篇文章<a href="http://www.importnew.com/24250.html" target="_blank" rel="noopener">《Stream性能分析》</a>。下面来看下Strea内的一些方法：</p>
+<h4 id="中间操作"><a href="#中间操作" class="headerlink" title="中间操作"></a>中间操作</h4><ul>
+<li><p>distinct</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">distinct</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  去除Stream中重复的对象，并返回一个流。（使用对象的equals方法）</p>
+</li>
+<li><p>skip</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">skip</span><span class="params">(<span class="keyword">long</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  跳过Stream中的前n个对象，将其他对象返回一个Stream。如果n超过了Stream中对象的个数，则会返回一个空的Stream。</p>
+</li>
+<li><p>limit</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">limit</span><span class="params">(<span class="keyword">long</span> maxSize)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  截取Stream的前maxSize个对象，并形成一个新Stream。</p>
+</li>
+<li><p>filter</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  根据给定的predicate来过滤对象，返回满足条件的对象构成的Stream。</p>
+</li>
+<li><p>map</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;R&gt; <span class="function">Stream&lt;R&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends R&gt; mapper)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>通过给定的mapper，将T类型的流转换为R类型的Stream。</p>
+</li>
+<li><p>flatMap</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;R&gt; <span class="function">Stream&lt;R&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends Stream&lt;? extends R&gt;&gt; mapper)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  flatMap也是将Stream进行转换，flatMap与map的区别在于 flatMap是将一个Stream中的每个值都转成一个个Stream，然后再将这些流扁平化成为一个Stream。<br>  例（转自：<a href="http://www.cnblogs.com/shenlanzhizun/p/6027042.html" target="_blank" rel="noopener">Java8 新特性之流式数据处理</a>）：<br>  假设我们有一个字符串数组String[] strs = {“java8”, “is”, “easy”, “to”, “use”};，我们希望输出构成这一数组的所有非重复字符，那么我们可能首先会想到如下实现：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String[]&gt; distinctStrs = Arrays.stream(strs)</span><br><span class="line">                    .map(str -&gt; str.split(<span class="string">""</span>))  <span class="comment">// 映射成为Stream&lt;String[]&gt;</span></span><br><span class="line">                    .distinct()</span><br><span class="line">                    .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>  在执行map操作以后，我们得到是一个包含多个字符串（构成一个字符串的字符数组）的流，此时执行distinct操作是基于在这些字符串数组之间的对比，所以达不到我们希望的目的，此时的输出为：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[j, a, v, a, 8]</span><br><span class="line">[i, s]</span><br><span class="line">[e, a, s, y]</span><br><span class="line">[t, o]</span><br><span class="line">[u, s, e]</span><br></pre></td></tr></table></figure>
+<p>  distinct只有对于一个包含多个字符的流进行操作才能达到我们的目的，即对Stream<string>进行操作。此时flatMap就可以达到我们的目的：</string></p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; distinctStrs = Arrays.stream(strs)</span><br><span class="line">                                .map(str -&gt; str.split(<span class="string">""</span>))  <span class="comment">// 映射成为Stream&lt;String[]&gt;</span></span><br><span class="line">                                .flatMap(Arrays::stream)  <span class="comment">// 扁平化为Stream&lt;String&gt;</span></span><br><span class="line">                                .distinct()</span><br><span class="line">                                .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>  flatMap将由map映射得到的Stream&lt;String[]&gt;，转换成由各个字符串数组映射成的流Stream<string>，再将这些小的流扁平化成为一个由所有字符串构成的大流Steam<string>，从而能够达到我们的目的。</string></string></p>
+</li>
+<li><p>sorted  </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">sorted</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">sorted</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> T&gt; comparator)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  sorted方法可以对Stream进行排序。排序的对象必须实现Comparable，如果没实现会抛出ClassCastException；不提供comparator时，则会调用compareTo方法。</p>
+</li>
+<li><p>peek</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">peek</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>  对流中的每个对象执行提供的action操作。<br>  在Stack中，peek用于查看一个对象。在流中也是一样，用于在流循环时，根据给定的action进行查看对象。虽然可以进行元素修改操作，但不建议。</p>
+</li>
+<li><p>综合例：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Integer[] a = <span class="keyword">new</span> Integer[]&#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>&#125;;</span><br><span class="line">	List&lt;Integer&gt; aList = Arrays.stream(a)</span><br><span class="line">    .distinct()</span><br><span class="line">    .skip(<span class="number">1</span>)</span><br><span class="line">    .filter((e) -&gt; e &lt; <span class="number">6</span>)</span><br><span class="line">    .peek(e -&gt; System.out.println(<span class="string">"循环1次"</span>))</span><br><span class="line">    .limit(<span class="number">4</span>)</span><br><span class="line">    .sorted()</span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">System.out.println(aList);</span><br></pre></td></tr></table></figure>
+<p>  输出：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">循环1次</span><br><span class="line">循环1次</span><br><span class="line">循环1次</span><br><span class="line">循环1次</span><br><span class="line">[1, 2, 4, 5]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="最终操作"><a href="#最终操作" class="headerlink" title="最终操作"></a>最终操作</h4><ul>
+<li><p>聚合</p>
+<ul>
+<li><p>max &amp; min</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Optional&lt;T&gt; <span class="title">min</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> T&gt; comparator)</span></span>;</span><br><span class="line"><span class="function">Optional&lt;T&gt; <span class="title">max</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> T&gt; comparator)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据给定的comparator返回Stream中的max或min。</p>
+</li>
+<li><p>count </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">count</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>返回Stream中对象的个数。</p>
+</li>
+</ul>
+</li>
+<li><p>匹配</p>
+<ul>
+<li><p>anyMatch &amp; allMatch &amp; noneMatch</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">anyMatch</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">allMatch</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">noneMatch</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据给定的predicate判断Stream是否匹配条件。</p>
+</li>
+<li><p>collect</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;R, A&gt; <span class="function">R <span class="title">collect</span><span class="params">(Collector&lt;? <span class="keyword">super</span> T, A, R&gt; collector)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据给定的collector对Stream中的元素进行操作，返回复杂数据结构的对象。用于将Stream中的对象转换成我们想要的结构，如list、map、set等。<br>前例中就使用collect(Collectors.toList())将Stream中的对象转换成List。</p>
+</li>
+<li><p>reduce  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Optional&lt;T&gt; <span class="title">reduce</span><span class="params">(BinaryOperator&lt;T&gt; accumulator)</span></span>;</span><br><span class="line"><span class="function">T <span class="title">reduce</span><span class="params">(T identity, BinaryOperator&lt;T&gt; accumulator)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果我们不知希望单纯的返回List这样的类型，而是希望将整个Stream经过一些操作后，规约成一个对象返回，就可以用到规约操作。reduce方法有两个参数，其中accumulator代表着规约的操作，即用何种的方式进行参数化处理；identity则是accumulator的标识值（具体用处暂不明）。<br>例：求和</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Integer[] a = <span class="keyword">new</span> Integer[]&#123;<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">11</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> sum = Arrays.stream(a)</span><br><span class="line">		.distinct()</span><br><span class="line">		.filter((e) -&gt; e &lt; <span class="number">6</span>)</span><br><span class="line">		.reduce(<span class="number">0</span>, (x, y) -&gt; x + y);<span class="comment">//或.reduce(0, Integer::sum);</span></span><br><span class="line">System.out.println(sum);<span class="comment">//15</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>toArray</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object[] toArray();</span><br></pre></td></tr></table></figure>
+<p>将Stream中的对象返回成一个Object数组。</p>
+</li>
+<li><p>forEach</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>顾名思义，对Stream中每个元素进行action操作，与peek类似，但forEach是一个最终操作，一般在结束时查看对象使用。</p>
+</li>
+<li><p>findFirst &amp; findAny</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Optional&lt;T&gt; <span class="title">findFirst</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">Optional&lt;T&gt; <span class="title">findAny</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>findFirst可以返回Stream中第一个对象，并将它封装在Optional中。<br>findAny则不是返回第一个对象，而是任意一个对象。在顺序Stream中findFirst和findAny的结果是一致的，但在并行Stream中，findFirst存在着限制，故在并行Stream中需要使用findAny（findAny源码注释中写的是some element？）。同样将对象封装在Optional中。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Optional-API"><a href="#Optional-API" class="headerlink" title="Optional API"></a>Optional API</h3><p>在java8之前的编程中，我们总是需要进行if(obj=null)来防止NullPointException，而在java8后，提供了Optional类，它一方面用于防止NullPotinException的判断，另一方面则为流式编程与函数式变成提供了更好的支持；Optional是一个包含对象的容器，它可以包含null值。在Optional类中封装了许多的方法，来让我们更好的处理我们的代码。接下来看看Optional中几个常用的方法：</p>
+<ul>
+<li><p>empty &amp; of &amp; ofNullable</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">empty</span><span class="params">()</span></span>&#123;...&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">of</span><span class="params">(T value)</span> </span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> Optional&lt;T&gt;(value);&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Optional&lt;T&gt; <span class="title">ofNullable</span><span class="params">(T value)</span></span>&#123;<span class="keyword">return</span> value == <span class="keyword">null</span> ? empty() : of(value);&#125;</span><br></pre></td></tr></table></figure>
+<p>  首先，Optioanl的构造方法是私有的，只能通过以上三个静态方法来获取Optional的实例。empty方法会返回Optional中的常量EMPTY对象，一般在compare时使用，注意这里的EMPTY是单例的而且为常量；一般我们需要构造一个Optional,使用of或ofNullable方法，of方法会将我们的传值构造一个新的Optional返回，而ofNullable则在接收null时返回EMPTY实例。</p>
+</li>
+<li><p>isPresent</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPresent</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> value != <span class="keyword">null</span>;&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ifPresent</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; consumer)</span> </span>&#123;<span class="keyword">if</span> (value != <span class="keyword">null</span>)consumer.accept(value);&#125;</span><br></pre></td></tr></table></figure>
+<p>  isPresent方法用于判断Optional包含的value是否为null，第一种方法返回一个boolean；第二种方法则根据判断，为null则什么都不执行，不为null则执行一个consumer操作。</p>
+</li>
+<li><p>map &amp; flatMap</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">map</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, ? extends U&gt; mapper)</span></span>&#123;...&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span>&lt;U&gt; Optional&lt;U&gt; <span class="title">flatMap</span><span class="params">(Function&lt;? <span class="keyword">super</span> T, Optional&lt;U&gt; mapper)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>  map与flatMap与Stream中用法与功能大致相同，都是转换及合并转换，不再赘述。</p>
+</li>
+<li><p>get</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>  get方法用于获取value。需要注意的是，如果value为null，则会抛出NoSuchElementException。</p>
+</li>
+<li><p>filter</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Optional&lt;T&gt; <span class="title">filter</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> T&gt; predicate)</span> </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>  filter方法也是获取value，它可以传入一个predicate，用于判断value是否满足条件。如果value为null，则会返回this；如果predicate.test为true，则返回this，否则会返回EMPTY。</p>
+</li>
+<li><p>orElse &amp; orElseGet &amp; orElseGet</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElse</span><span class="params">(T other)</span> </span>&#123;<span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other;&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">orElseGet</span><span class="params">(Supplier&lt;? extends T&gt; other)</span> </span>&#123;<span class="keyword">return</span> value != <span class="keyword">null</span> ? value : other.get();&#125;</span><br><span class="line"><span class="keyword">public</span> &lt;X extends Throwable&gt; <span class="function">T <span class="title">orElseThrow</span><span class="params">(Supplier&lt;? extends X&gt; exceptionSupplier)</span> <span class="keyword">throws</span> X</span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>  这三个方法都用于获取value，同时可以在value==null的情况下做出不同的操作。orElse可以传入一个other，当value==null时则返回null；orElseGet则是使用Supplier，为null时调用get方法；orElseThrow则是接收一个Supplier包含某种异常的exceptionSupplier，为null时则会调用get方法抛出一个异常。</p>
+</li>
+</ul>
+<h3 id="Date-Time-API"><a href="#Date-Time-API" class="headerlink" title="Date Time API"></a>Date Time API</h3><p>Java8使用新的日期时间API覆盖旧的日期时间API的，处理了以下缺点。</p>
+<ul>
+<li>线程安全 - java.util.Date不是线程安全的，因此开发者必须在使用日期处理并发性问题。新的日期时间API是不可变的，并且没有setter方法。</li>
+<li>设计问题 - 默认的开始日期为1900年，月的开始月份为0而不是1，没有统一。不直接使用方法操作日期。新的API提供了这样操作实用方法。</li>
+<li>时区处理困难 - 开发人员必须编写大量的代码来处理时区的问题。新的API设计开发为这些特定领域提供了帮助。</li>
+</ul>
+<p>JAVA8引入了java.time包，一个新的日期时间API。限于篇幅与精力问题，这里不对java.time进行过多的介绍，这里推荐几篇个人觉得不错的博文以供研究：<br><a href="http://blog.csdn.net/sun_promise/article/details/51383618" target="_blank" rel="noopener">Java 类库的新特性之日期时间API (Date/Time API )</a><br><a href="https://coderbee.net/index.php/java/20131015/503" target="_blank" rel="noopener">Java 8 之 java.time 包</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/note/" rel="tag"># note</a>
+          
+            <a href="/tags/笔记/" rel="tag"># 笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/16/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">薄枫</p>
+              <p class="site-description motion-element" itemprop="description">description</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bfsan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bfengsan@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java8特性学习笔记"><span class="nav-number">1.</span> <span class="nav-text">Java8特性学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda表达式"><span class="nav-number">1.1.</span> <span class="nav-text">Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lambda语法"><span class="nav-number">1.1.1.</span> <span class="nav-text">Lambda语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lambda表达式的特征"><span class="nav-number">1.1.2.</span> <span class="nav-text">Lambda表达式的特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lambda表达式例子"><span class="nav-number">1.1.3.</span> <span class="nav-text">Lambda表达式例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法引用"><span class="nav-number">1.2.</span> <span class="nav-text">方法引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法引用的种类"><span class="nav-number">1.2.1.</span> <span class="nav-text">方法引用的种类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法引用的例子"><span class="nav-number">1.2.2.</span> <span class="nav-text">方法引用的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认方法"><span class="nav-number">1.3.</span> <span class="nav-text">默认方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#默认方法（defalut）"><span class="nav-number">1.3.1.</span> <span class="nav-text">默认方法（defalut）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态方法（static）"><span class="nav-number">1.3.2.</span> <span class="nav-text">静态方法（static）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数接口"><span class="nav-number">1.4.</span> <span class="nav-text">函数接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-function-Predicate"><span class="nav-number">1.4.1.</span> <span class="nav-text">java.util.function.Predicate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-Comparator"><span class="nav-number">1.4.2.</span> <span class="nav-text">java.util.Comparator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-function-Supplier"><span class="nav-number">1.4.3.</span> <span class="nav-text">java.util.function.Supplier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-util-function-Consumer"><span class="nav-number">1.4.4.</span> <span class="nav-text">java.util.function.Consumer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Function"><span class="nav-number">1.5.</span> <span class="nav-text">Function</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">1.5.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主要方法"><span class="nav-number">1.5.2.</span> <span class="nav-text">主要方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法详解"><span class="nav-number">1.5.3.</span> <span class="nav-text">方法详解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#apply："><span class="nav-number">1.5.3.1.</span> <span class="nav-text">apply：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#compose"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">compose:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#andThen："><span class="nav-number">1.5.3.3.</span> <span class="nav-text">andThen：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#identity："><span class="nav-number">1.5.3.4.</span> <span class="nav-text">identity：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream"><span class="nav-number">1.6.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中间操作"><span class="nav-number">1.6.1.</span> <span class="nav-text">中间操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最终操作"><span class="nav-number">1.6.2.</span> <span class="nav-text">最终操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional-API"><span class="nav-number">1.7.</span> <span class="nav-text">Optional API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Date-Time-API"><span class="nav-number">1.8.</span> <span class="nav-text">Date Time API</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薄枫</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
