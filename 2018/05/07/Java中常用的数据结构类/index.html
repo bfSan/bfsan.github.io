@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,数据结构,面试," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="用QA的形式，记录自己面试前复习&amp;学习的一些知识点。">
+<meta name="keywords" content="Java,数据结构,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中常用的数据结构类">
+<meta property="og:url" content="https:/bfsan.github.io/2018/05/07/Java中常用的数据结构类/index.html">
+<meta property="og:site_name" content="薄枫">
+<meta property="og:description" content="用QA的形式，记录自己面试前复习&amp;学习的一些知识点。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://imgsa.baidu.com/exp/w=500/sign=acce0e725043fbf2c52ca623807fca1e/e4dde71190ef76c6cd7dd0519e16fdfaaf516718.jpg">
+<meta property="og:image" content="https://i.imgur.com/PsPbnOn.png">
+<meta property="og:image" content="https://i.imgur.com/25c4ThE.png">
+<meta property="og:image" content="https://i.imgur.com/9tI31Kh.png">
+<meta property="og:image" content="https://i.imgur.com/Eb8NH9u.png">
+<meta property="og:image" content="https://i.imgur.com/1Pqi8gl.png">
+<meta property="og:image" content="https://i.imgur.com/VO9S814.png">
+<meta property="og:image" content="https://i.imgur.com/3pqR6hp.png">
+<meta property="og:image" content="https://i.imgur.com/x4qeJ0j.png">
+<meta property="og:updated_time" content="2018-05-07T04:58:53.266Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java中常用的数据结构类">
+<meta name="twitter:description" content="用QA的形式，记录自己面试前复习&amp;学习的一些知识点。">
+<meta name="twitter:image" content="https://imgsa.baidu.com/exp/w=500/sign=acce0e725043fbf2c52ca623807fca1e/e4dde71190ef76c6cd7dd0519e16fdfaaf516718.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https:/bfsan.github.io/2018/05/07/Java中常用的数据结构类/"/>
+
+
+
+
+
+  <title>Java中常用的数据结构类 | 薄枫</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">薄枫</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个集思考控，总结控，沟通控于一身的玄学探求者。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https:/bfsan.github.io/2018/05/07/Java中常用的数据结构类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="薄枫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薄枫">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java中常用的数据结构类</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T12:58:52+08:00">
+                2018-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  用QA的形式，记录自己面试前复习&学习的一些知识点。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="结构体系图"><a href="#结构体系图" class="headerlink" title="结构体系图"></a>结构体系图</h4><p><img src="https://imgsa.baidu.com/exp/w=500/sign=acce0e725043fbf2c52ca623807fca1e/e4dde71190ef76c6cd7dd0519e16fdfaaf516718.jpg" alt=""></p>
+<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><h5 id="ArrayList、LinkedList、Vector有什么区别？"><a href="#ArrayList、LinkedList、Vector有什么区别？" class="headerlink" title="ArrayList、LinkedList、Vector有什么区别？"></a>ArrayList、LinkedList、Vector有什么区别？</h5><ul>
+<li>ArrayList<ul>
+<li>只能装入引用对象（基本类型要转换为封装类）；</li>
+<li>线程不安全；</li>
+<li>底层由数组实现（顺序表），因为由顺序表实现，所以会具备顺序表的特点，如：需要声明长度、超出长度时需要进行扩容、不适合频繁的移动删除元素、检索元素快；</li>
+<li>capacity默认为10，超出时，capacity自动增长0.5倍<code>(oldCapacity &gt;&gt; 1)</code>；</li>
+</ul>
+</li>
+<li>Vector：<ul>
+<li>只能装入引用对象（基本类型要转换为封装类）；</li>
+<li>Vector通过synchronized方法保证线程安全；</li>
+<li>底层也由数组实现；</li>
+<li>capacity默认为10（在构造方法中），超出时增长capacityIncrement的量，capacityIncrement小于等于0时，则增长1倍<code>((capacityIncrement &gt; 0) ? capacityIncrement : oldCapacity)</code></li>
+</ul>
+</li>
+<li>LinkedList<ul>
+<li>只能装入引用对象（基本类型会转换为封装类）；</li>
+<li>线程不安全；</li>
+<li>底层实现为链表，具备链表的特点，如：不用声明长度、检索性能较差，但是插入移动删除较快。</li>
+<li>链表通过Node对象实现<img src="https://i.imgur.com/PsPbnOn.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h5 id="ArrayList的扩容消耗"><a href="#ArrayList的扩容消耗" class="headerlink" title="ArrayList的扩容消耗"></a>ArrayList的扩容消耗</h5><p>由于ArrayList使用<br><code>elementData = Arrays.copyOf(elementData, newCapacity);</code><br>进行扩容，而<img src="https://i.imgur.com/25c4ThE.png" alt=""><br>每次都会重新创建一个newLength长度的数组，所以扩容的空间复杂度为O(n),时间复杂度为O(n)</p>
+<h5 id="Arrays-asList方法后的List可以扩容吗？"><a href="#Arrays-asList方法后的List可以扩容吗？" class="headerlink" title="Arrays.asList方法后的List可以扩容吗？"></a>Arrays.asList方法后的List可以扩容吗？</h5><p>不能，asList返回的List为只读的。其原因为：asList方法返回的ArrayList是Arrays的一个内部类，并且没有实现add，remove等操作<br><img src="https://i.imgur.com/9tI31Kh.png" alt=""><br>而在AbstractList中，add操作<br><img src="https://i.imgur.com/Eb8NH9u.png" alt=""></p>
+<h5 id="如何使List线程安全"><a href="#如何使List线程安全" class="headerlink" title="如何使List线程安全"></a>如何使List线程安全</h5><p><code>Collections.synchronizedList(list);</code><br>或者使用手动的方法保护线程安全。</p>
+<h5 id="List是有序的吗？"><a href="#List是有序的吗？" class="headerlink" title="List是有序的吗？"></a>List是有序的吗？</h5><p>这里的有序指有序性，有序或无序是指是否按照其添加的顺序来存储对象，List是有序的。</p>
+<h5 id="List怎么实现排序？"><a href="#List怎么实现排序？" class="headerlink" title="List怎么实现排序？"></a>List怎么实现排序？</h5><p>实现排序，可以使用自定义排序<br><code>list.sort(new Comparator(){...})</code><br>或者使用Collections进行快速排序<br><code>Collections.sort(list)</code></p>
+<h5 id="List和Array之间如何互相转换？"><a href="#List和Array之间如何互相转换？" class="headerlink" title="List和Array之间如何互相转换？"></a>List和Array之间如何互相转换？</h5><ul>
+<li>Array转List：List list = new ArrayList(array);</li>
+<li>List转Array：Object [] objects = list.toArray();</li>
+</ul>
+<h4 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h4><h5 id="Set与List有什么区别？"><a href="#Set与List有什么区别？" class="headerlink" title="Set与List有什么区别？"></a>Set与List有什么区别？</h5><ul>
+<li>Set<ul>
+<li>只能装入引用对象（基本类型要转换为封装类）；</li>
+<li>线程不安全</li>
+<li>较List，是无序的（无法保证添加的顺序），而且元素不能重复</li>
+<li>底层使用了map进行实现（HashMap&amp;LinkedHashMap）,借用map的key不能重复的特性，来实现不重复性。<br><img src="https://i.imgur.com/1Pqi8gl.png" alt=""><br><img src="https://i.imgur.com/VO9S814.png" alt=""></li>
+</ul>
+</li>
+</ul>
+<h5 id="HashSet、LinkedHashSet、TreeSet的区别？"><a href="#HashSet、LinkedHashSet、TreeSet的区别？" class="headerlink" title="HashSet、LinkedHashSet、TreeSet的区别？"></a>HashSet、LinkedHashSet、TreeSet的区别？</h5><p>都无法保证线程安全，底层都使用map实现不重复性（所以特性也在map中），Set都不能使用get(index)的方法获取元素，只能使用iterator进行获取。其中：</p>
+<ul>
+<li>HashSet<ul>
+<li>使用HashMap，无法保证有序性。</li>
+</ul>
+</li>
+<li>LinkedHashSet<ul>
+<li>使用LinkedHashMap,可以保证有序性</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>TreeSet<ul>
+<li>使用NavigableMap，可以使用Comparator来控制顺序</li>
+</ul>
+</li>
+</ul>
+<h5 id="如何使Set线程安全"><a href="#如何使Set线程安全" class="headerlink" title="如何使Set线程安全"></a>如何使Set线程安全</h5><p><code>Collections.synchronizedSet(set);</code></p>
+<h4 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h4><h5 id="HashMap、LinkedHashMap、Hashtable、TreeMap的区别？"><a href="#HashMap、LinkedHashMap、Hashtable、TreeMap的区别？" class="headerlink" title="HashMap、LinkedHashMap、Hashtable、TreeMap的区别？"></a>HashMap、LinkedHashMap、Hashtable、TreeMap的区别？</h5><ul>
+<li>HashMap<ul>
+<li>线程不安全</li>
+<li>允许有一个key为null</li>
+<li>通过<strong>hash算法</strong>，来确定key是否存在</li>
+<li>不能保证有序性</li>
+<li>默认大小为16，每次扩容默认增大1倍。默认情况下，数组大小为16，那么当HashMap中元素个数超过16*0.75=12（这个值就是代码中的threshold值，也叫做临界值）的时候，就把数组的大小扩展为 2*16=32，即扩大一倍。</li>
+</ul>
+</li>
+<li>LinkedHashMap<br> HashMap的子类，将结构与操作更改为链表形式<ul>
+<li>线程不安全</li>
+<li>accessOrder默认fasle，可以保证有序性</li>
+<li>在HashMap的线性单向链表的基础上，内部维护了一个双向链表<br><img src="https://i.imgur.com/3pqR6hp.png" alt=""></li>
+</ul>
+</li>
+<li>Hashtable<ul>
+<li>父类为Dictionary，与HashMap不同</li>
+<li>线程安全，方法通过synchronized同步</li>
+<li>key&amp;value都不能为null</li>
+<li>不能保证有序性</li>
+<li>默认大小为11，其余与HashMap一致</li>
+</ul>
+</li>
+<li>TreeMap<ul>
+<li>线程不安全</li>
+<li>内部使用<strong>红黑树</strong>，需要key实现Comparable接口</li>
+<li>可以定义Comparator控制顺序</li>
+<li>迭代遍历时使用中序遍历</li>
+</ul>
+</li>
+</ul>
+<h5 id="如何使Map线程安全"><a href="#如何使Map线程安全" class="headerlink" title="如何使Map线程安全"></a>如何使Map线程安全</h5><p><code>Collections.synchronizedMap(map);</code></p>
+<h5 id="什么样的对象适合做为键，有什么要求？"><a href="#什么样的对象适合做为键，有什么要求？" class="headerlink" title="什么样的对象适合做为键，有什么要求？"></a>什么样的对象适合做为键，有什么要求？</h5><p>String、Interger这样的类是final类型的，具有不可变性，且重写了equals()和hashCode()方法。换言之，做为key的对象，不可变性是必要的，因为要计算hashCode()，要防止放入时和取出时hashcode不一致。此外还需要重写equals()和hashCode()方法，用于比较对象一致性。</p>
+<h5 id="HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？"><a href="#HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？" class="headerlink" title="HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？"></a>HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？</h5><p>不是，是比传入容量参数值大的最小的2的n次方，比如传入6，实际分配8。</p>
+<h5 id="HashMap的底层数据结构是什么？"><a href="#HashMap的底层数据结构是什么？" class="headerlink" title="HashMap的底层数据结构是什么？"></a>HashMap的底层数据结构是什么？</h5><p>是一个数组，结合了顺序表+单向链表的形式，内部的每一个节点都是Node对象<br><img src="https://i.imgur.com/x4qeJ0j.png" alt=""></p>
+<h4 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h4><p>推荐几篇描述map原理还不错的文章</p>
+<ul>
+<li><a href="https://blog.csdn.net/uhgagnu/article/details/54982960" target="_blank" rel="noopener">https://blog.csdn.net/uhgagnu/article/details/54982960</a></li>
+<li><a href="http://baijiahao.baidu.com/s?id=1585269929754900992&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">http://baijiahao.baidu.com/s?id=1585269929754900992&amp;wfr=spider&amp;for=pc</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/23/Java8——快速入门手册（学习笔记）/" rel="next" title="Java8——快速入门手册（学习笔记）">
+                <i class="fa fa-chevron-left"></i> Java8——快速入门手册（学习笔记）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">薄枫</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bfsan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bfengsan@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#结构体系图"><span class="nav-number">1.</span> <span class="nav-text">结构体系图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#List"><span class="nav-number">2.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ArrayList、LinkedList、Vector有什么区别？"><span class="nav-number">2.1.</span> <span class="nav-text">ArrayList、LinkedList、Vector有什么区别？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ArrayList的扩容消耗"><span class="nav-number">2.2.</span> <span class="nav-text">ArrayList的扩容消耗</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Arrays-asList方法后的List可以扩容吗？"><span class="nav-number">2.3.</span> <span class="nav-text">Arrays.asList方法后的List可以扩容吗？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何使List线程安全"><span class="nav-number">2.4.</span> <span class="nav-text">如何使List线程安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List是有序的吗？"><span class="nav-number">2.5.</span> <span class="nav-text">List是有序的吗？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List怎么实现排序？"><span class="nav-number">2.6.</span> <span class="nav-text">List怎么实现排序？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List和Array之间如何互相转换？"><span class="nav-number">2.7.</span> <span class="nav-text">List和Array之间如何互相转换？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Set"><span class="nav-number">3.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Set与List有什么区别？"><span class="nav-number">3.1.</span> <span class="nav-text">Set与List有什么区别？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HashSet、LinkedHashSet、TreeSet的区别？"><span class="nav-number">3.2.</span> <span class="nav-text">HashSet、LinkedHashSet、TreeSet的区别？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何使Set线程安全"><span class="nav-number">3.3.</span> <span class="nav-text">如何使Set线程安全</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map"><span class="nav-number">4.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HashMap、LinkedHashMap、Hashtable、TreeMap的区别？"><span class="nav-number">4.1.</span> <span class="nav-text">HashMap、LinkedHashMap、Hashtable、TreeMap的区别？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何使Map线程安全"><span class="nav-number">4.2.</span> <span class="nav-text">如何使Map线程安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#什么样的对象适合做为键，有什么要求？"><span class="nav-number">4.3.</span> <span class="nav-text">什么样的对象适合做为键，有什么要求？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？"><span class="nav-number">4.4.</span> <span class="nav-text">HashMap初始化传入的容量参数的值就是HashMap实际分配的空间么？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HashMap的底层数据结构是什么？"><span class="nav-number">4.5.</span> <span class="nav-text">HashMap的底层数据结构是什么？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附录"><span class="nav-number">5.</span> <span class="nav-text">附录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薄枫</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
