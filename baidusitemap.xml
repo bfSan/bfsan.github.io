@@ -4,13 +4,59 @@
 
     
   <url>
+    <loc>https:/bfsan.github.io/2017/01/25/MyBatis%E2%80%94%E2%80%94%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/</loc>
+    <lastmod>2018-05-07T05:06:40.462Z</lastmod>
+    <data>
+        <display>
+        <title>MyBatis——极速入门开发手册</title>
+        <pubTime>2017-01-25T13:35:00.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2017/03/20/Maven%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%89/</loc>
+    <lastmod>2018-05-07T05:06:01.580Z</lastmod>
+    <data>
+        <display>
+        <title>Maven——快速入门手册（学习记录）</title>
+        <pubTime>2017-03-20T13:00:00.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https:/bfsan.github.io/2018/05/07/Java%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB/</loc>
-    <lastmod>2018-05-07T04:58:53.266Z</lastmod>
+    <lastmod>2018-05-07T05:05:54.221Z</lastmod>
     <data>
         <display>
         <title>Java中常用的数据结构类</title>
         <pubTime>2018-05-07T04:58:52.000Z</pubTime>
         
+        <tag>笔记</tag>
+         
         <tag>Java</tag>
          
         <tag>数据结构</tag>
@@ -28,66 +74,16 @@
 
     
   <url>
-    <loc>https:/bfsan.github.io/2017/01/25/MyBatis%E2%80%94%E2%80%94%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/</loc>
-    <lastmod>2018-04-25T13:49:36.850Z</lastmod>
-    <data>
-        <display>
-        <title>MyBatis——极速入门开发手册</title>
-        <pubTime>2017-01-25T13:35:00.000Z</pubTime>
-        
-        <tag>note</tag>
-         
-        <tag>笔记</tag>
-         
-        <tag>mybatis</tag>
-         
-         
-           
-             
-              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https:/bfsan.github.io/2017/03/20/Maven%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%89/</loc>
-    <lastmod>2018-04-25T13:49:20.829Z</lastmod>
-    <data>
-        <display>
-        <title>Maven——快速入门手册（学习记录）</title>
-        <pubTime>2017-03-20T13:00:00.000Z</pubTime>
-        
-        <tag>note</tag>
-         
-        <tag>笔记</tag>
-         
-        <tag>maven</tag>
-         
-         
-           
-             
-              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https:/bfsan.github.io/2018/04/23/Java8%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%89/</loc>
-    <lastmod>2018-04-25T12:43:29.164Z</lastmod>
+    <lastmod>2018-05-07T05:05:43.580Z</lastmod>
     <data>
         <display>
         <title>Java8——快速入门手册（学习笔记）</title>
         <pubTime>2018-04-23T02:34:32.000Z</pubTime>
         
-        <tag>note</tag>
-         
         <tag>笔记</tag>
          
-        <tag>java</tag>
+        <tag>Java</tag>
          
          
            
