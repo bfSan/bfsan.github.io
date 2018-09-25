@@ -4,6 +4,198 @@
 
     
   <url>
+    <loc>https:/bfsan.github.io/2018/09/07/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2018-09-25T01:58:25.725Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——类的加载机制</title>
+        <pubTime>2018-09-07T08:57:35.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/09/04/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</loc>
+    <lastmod>2018-09-25T01:58:13.461Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——垃圾收集器</title>
+        <pubTime>2018-09-04T09:09:31.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/09/01/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/</loc>
+    <lastmod>2018-09-25T01:58:01.137Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——对象的创建过程</title>
+        <pubTime>2018-09-01T08:01:35.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/08/30/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-Java%E7%9A%84%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/</loc>
+    <lastmod>2018-09-25T01:57:51.562Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——Java的内存区域</title>
+        <pubTime>2018-08-30T13:16:24.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/09/03/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-GC%E6%97%A5%E5%BF%97/</loc>
+    <lastmod>2018-09-25T01:56:38.204Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——GC日志</title>
+        <pubTime>2018-09-03T02:28:30.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/09/02/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-GC%E6%A6%82%E8%BF%B0/</loc>
+    <lastmod>2018-09-25T01:54:55.435Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——GC概述</title>
+        <pubTime>2018-09-02T04:05:00.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/08/30/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Java%E7%9A%84%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/</loc>
+    <lastmod>2018-08-31T02:03:32.916Z</lastmod>
+    <data>
+        <display>
+        <title>JVM学习笔记——Java的内存区域</title>
+        <pubTime>2018-08-30T13:16:24.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+        <tag>JVM</tag>
+         
+        <tag>笔记</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https:/bfsan.github.io/2018/04/25/MongoDB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
+    <lastmod>2018-08-30T12:11:56.838Z</lastmod>
+    <data>
+        <display>
+        <title>MongoDB常用命令</title>
+        <pubTime>2018-04-25T12:49:12.000Z</pubTime>
+        
+        <tag>笔记</tag>
+         
+        <tag>mongodb</tag>
+         
+        <tag>note</tag>
+         
+         
+           
+             
+              <breadCrumb title="学习笔记" url="https:/bfsan.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https:/bfsan.github.io/2018/08/30/%E7%AE%80%E5%8D%95%E7%90%86%E8%A7%A3TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</loc>
     <lastmod>2018-08-30T12:09:43.039Z</lastmod>
     <data>
@@ -11,9 +203,9 @@
         <title>简单理解TCP的三次握手与四次挥手</title>
         <pubTime>2018-08-30T12:09:42.000Z</pubTime>
         
-        <tag>面试</tag>
-         
         <tag>笔记</tag>
+         
+        <tag>面试</tag>
          
         <tag>TCP</tag>
          
@@ -37,11 +229,11 @@
         
         <tag>Java</tag>
          
+        <tag>笔记</tag>
+         
         <tag>数据结构</tag>
          
         <tag>面试</tag>
-         
-        <tag>笔记</tag>
          
          
            

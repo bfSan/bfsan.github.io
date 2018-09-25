@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,JVM,笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta name="keywords" content="Java,JVM,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM学习笔记——类的加载机制">
+<meta property="og:url" content="https:/bfsan.github.io/2018/09/07/JVM学习笔记-类的加载机制/index.html">
+<meta property="og:site_name" content="薄枫">
+<meta property="og:description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/sq75ZTM.jpg">
+<meta property="og:updated_time" content="2018-09-25T01:58:25.725Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM学习笔记——类的加载机制">
+<meta name="twitter:description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta name="twitter:image" content="https://i.imgur.com/sq75ZTM.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https:/bfsan.github.io/2018/09/07/JVM学习笔记-类的加载机制/"/>
+
+
+
+
+
+  <title>JVM学习笔记——类的加载机制 | 薄枫</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">薄枫</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个集思考控，总结控，沟通控于一身的玄学探求者。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https:/bfsan.github.io/2018/09/07/JVM学习笔记-类的加载机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="薄枫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薄枫">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM学习笔记——类的加载机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-07T16:57:35+08:00">
+                2018-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="类的加载机制"><a href="#类的加载机制" class="headerlink" title="类的加载机制"></a>类的加载机制</h2><ul>
+<li><h4 id="类加载的过程：加载、验证、准备、解析、初始化"><a href="#类加载的过程：加载、验证、准备、解析、初始化" class="headerlink" title="类加载的过程：加载、验证、准备、解析、初始化"></a>类加载的过程：加载、验证、准备、解析、初始化</h4><ul>
+<li>加载<ol>
+<li>通过类的全类名获取定义此类的二进制字节流</li>
+<li>通过字节流获取静态存储结构并转化为方法区的运行时数据结构</li>
+<li>生成一个代表该类的java.lang.Class对象，作为访问方法区数据的入口。</li>
+</ol>
+</li>
+<li>验证<ul>
+<li>文件格式验证，验证字节流是否Class文件格式的规范，文件能否被当前版本的虚拟机处理。</li>
+<li>元数据验证，对字节码信息进行语义分析，保证其符合Java语法。</li>
+<li>字节码验证，针对方法内指令级别的验证，保证字节码指令不会危害虚拟机安全。</li>
+<li>符号引用验证，由符号引用转为直接引用时的验证，即发生在“解析”阶段。验证符号引用的内容是否能找到匹配的信息，例如：符号引用中通过全类名能找到对应的类，符号引用中的信息，可见性（private、public..）是否能被当前类访问等等。</li>
+</ul>
+</li>
+<li>准备<br>  为类分配内存，设置类变量默认初始值。</li>
+<li>解析<br>  将类内部的“符号引用”替换为“直接引用”。替换的范围包括，类或接口名，字段名，类方法名，接口方法名。<ul>
+<li>符号引用<br>  以一组符号来描述所引用的目标，比如<code>String s = &quot;a&quot;</code>，使用s时就会被解析成符号引用。</li>
+<li>直接引用<br>  可以直接指向目标的指针、偏移量或是一个能间接定位到目标的句柄。比如<code>System.out.print(&quot;abc&quot;)</code>，其中“abc”就会被解析为直接引用。</li>
+</ul>
+</li>
+<li>初始化<br>  生成并运行&lt;clinit&gt;()方法。<ul>
+<li>生成<ul>
+<li>&lt;clinit&gt;()方法会收集类变量初始赋值操作以及静态代码块的内容，按照源文件中出现的顺序进行收集。</li>
+<li>在没有类变量初始化操作以及静态代码块时，&lt;clinit&gt;()可以不生成。</li>
+</ul>
+</li>
+<li>运行<ul>
+<li>JVM会保证父类的&lt;clinit&gt;()先于子类的&lt;clinit&gt;()执行。</li>
+<li>接口与类不同，子接口的&lt;clinit&gt;()执行时，如果没有引用父接口的变量，则父接口的&lt;clinit&gt;()不会执行。</li>
+<li>&lt;clinit&gt;()执行时JVM会对其进行加锁，也就是说多个线程执行&lt;clinit&gt;()时，只有一个线程会执行，其他线程将会阻塞等待执行完毕。<br><br></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h4 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h4>  类加载器就是实现“加载”这个动作的组件。在Java中，两个类是否“相等”，必须在这两个类是由同一个类加载器加载的前提下。这里的“相等”，包括：Class的equals()、Class的isInstance()、instanceof关键字等等。<ul>
+<li>启动类加载器（Bootstrap ClassLoader）<br>  负责加载&lt;JAVA_HOME&gt;\lib目录中的类库。</li>
+<li>扩展类加载器（Extension ClassLoader）<br>  负责加载&lt;JAVA_HOME&gt;\lib\ext目录中的类库。</li>
+<li>应用程序类加载器（Application ClassLoader）<br>  这个加载器是ClassLoader中getSystemClassLoader的返回值，默认情况下这个就是程序中默认的类加载器，它负责加载应用程序的类路径的上的类库(ClassPath)。<br><br></li>
+</ul>
+</li>
+<li><h4 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h4>  <img src="https://i.imgur.com/sq75ZTM.jpg" alt=""><br>  所有类加载器遵循“父子”的层级关系（这里的“父子关系一般使用复合而非继承”），当一个类加载时优先委托给父级的加载器进行加载，若所有父级加载器都无法加载该类时，才会到本加载器加载。<br>  <br></li>
+<li><h4 id="OSGi的类加载模型"><a href="#OSGi的类加载模型" class="headerlink" title="OSGi的类加载模型"></a>OSGi的类加载模型</h4>  OSGi将每个模块称为Bundle，与普通的Java类库差别不大，都是Package与Class。Bundle将所依赖的Package通过Import-Packge进行声明，将允许导出的Package通过Export-Packge声明。如果某个Bundle依赖了某个Package，那么所有对这个Package内的类加载，全部会交给Export该Package的Bundle的类加载器进行处理。详细的类加载规则如下：<ul>
+<li>以java.*开头的类，委派给父类加载器</li>
+<li>否则，委派列表内的类委派给父类加载器</li>
+<li>否则，Import列表中的类，委派给Export这个类的Bundle的类加载器。</li>
+<li>否则，查找当前Bundle的ClassPath，使用自己的类加载器。</li>
+<li>否则，查找是否存在自己的Fragement Bundle中，如果是则委派给Fragement Bundle的类加载器。</li>
+<li>否则，查找Dynamic Import列表的Bundle，委派给对应的Bundle的类加载器。</li>
+<li>否则，类加载失败。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+            <a href="/tags/笔记/" rel="tag"># 笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/04/JVM学习笔记-垃圾收集器/" rel="next" title="JVM学习笔记——垃圾收集器">
+                <i class="fa fa-chevron-left"></i> JVM学习笔记——垃圾收集器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">薄枫</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bfsan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bfengsan@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类的加载机制"><span class="nav-number">1.</span> <span class="nav-text">类的加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类加载的过程：加载、验证、准备、解析、初始化"><span class="nav-number">1.0.1.</span> <span class="nav-text">类加载的过程：加载、验证、准备、解析、初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类加载器"><span class="nav-number">1.0.2.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">1.0.3.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSGi的类加载模型"><span class="nav-number">1.0.4.</span> <span class="nav-text">OSGi的类加载模型</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薄枫</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,JVM,笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta name="keywords" content="Java,JVM,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM学习笔记——GC概述">
+<meta property="og:url" content="https:/bfsan.github.io/2018/09/02/JVM学习笔记-GC概述/index.html">
+<meta property="og:site_name" content="薄枫">
+<meta property="og:description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/FgacPmU.jpg">
+<meta property="og:image" content="https://i.imgur.com/rVLcVCb.jpg">
+<meta property="og:image" content="https://i.imgur.com/3v4hKEx.jpg">
+<meta property="og:updated_time" content="2018-09-25T01:54:55.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM学习笔记——GC概述">
+<meta name="twitter:description" content="最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。">
+<meta name="twitter:image" content="https://i.imgur.com/FgacPmU.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https:/bfsan.github.io/2018/09/02/JVM学习笔记-GC概述/"/>
+
+
+
+
+
+  <title>JVM学习笔记——GC概述 | 薄枫</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">薄枫</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个集思考控，总结控，沟通控于一身的玄学探求者。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https:/bfsan.github.io/2018/09/02/JVM学习笔记-GC概述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="薄枫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="薄枫">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM学习笔记——GC概述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T12:05:00+08:00">
+                2018-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  最近开始着手JVM的学习，在这里把自己学习过程中的笔记分享出来，希望能帮到一些小伙伴，同时也是对自己的学习的一个梳理。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="GC概述"><a href="#GC概述" class="headerlink" title="GC概述"></a>GC概述</h2><p>其实GC主要就是思考以下三件事情：</p>
+<ul>
+<li>哪些内存需要回收？</li>
+<li>什么时候回收？</li>
+<li>如何回收？<br></li>
+</ul>
+<hr>
+<ul>
+<li><h4 id="哪些内存需要回收"><a href="#哪些内存需要回收" class="headerlink" title="哪些内存需要回收"></a>哪些内存需要回收</h4>  主要针对Java堆和方法区，程序计数器、虚拟机栈、本地方法栈内存分配与回收具有确定性，所以不需要过多考虑GC的问题。<br>  其中方法区的回收主要针对以下两种：<ul>
+<li>回收常量<br>  没有任何地方引用到该常量时，该常量将会被回收。</li>
+<li>回收无用类<br>  同时满足以下几个条件则视为“无用类”。<ul>
+<li>Java堆中不存在任何该类的实例</li>
+<li>加载该类的ClassLoader已经被回收</li>
+<li>该类的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问到该类。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h4 id="什么时候回收（判断对象是否“死去”）"><a href="#什么时候回收（判断对象是否“死去”）" class="headerlink" title="什么时候回收（判断对象是否“死去”）"></a>什么时候回收（判断对象是否“死去”）</h4><ul>
+<li>#####引用计数算法<br>  为对象增加一个引用计数器，每有一次引用则计数器+1，失去一个引用则计数器-1。这种算法效率很高，实现也很简单，但是在相互引用的情况下，会出现无法回收的情况。例如：<code>a.instance = b; b.instance = a;</code></li>
+<li><p>#####可达性分析算法<br>  使用GC Roots作为起始点，当一个对象到GC Roots没有引用链路时（即不可达），则此时对象视为“死亡”。此方法也是现有JVM中常用的算法。<br>  GC Roots包括下面几种：</p>
+<blockquote>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>本地方法栈中Native方法引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+</ul>
+</blockquote>
+<p>  换句话来说，以上4中类型其实就是：类成员变量，类静态变量，常量，局部变量，只要某个对象不被以上4种类型关联到，那么该对象就是“已死”的，gc时就会被回收内存空间。</p>
+</li>
+</ul>
+</li>
+<li><p>####如何回收（垃圾收集算法）</p>
+<ul>
+<li>#####标记-清除算法（Mark-Sweep）<br>  <img src="https://i.imgur.com/FgacPmU.jpg" alt="Mark-Sweep"><br>  它是最基础的算法，后续的算法都是针对它的缺点改进而生。它存在两个缺点：<ul>
+<li>效率问题。标记与清除这两个过程效率都不高。</li>
+<li>空间问题。如图所示，清除后的内存空间是不规整的，会产生大量的内存碎片。大量的碎片会导致分配大对象时，找不到连续的内存空间而提前触发另一次GC。<br><br></li>
+</ul>
+</li>
+<li><p>#####复制算法（Copying）<br>  <img src="https://i.imgur.com/rVLcVCb.jpg" alt="Copying"><br>  针对标记-清除的效率问题，复制算法将内存分为两块空间，每次只使用其中一块。当这块的内存空间用完时，将存活的对象移到另一块中，然后将已使用的内存空间一次性清理掉。这样做的好处是不会产生碎片，清除也是针对连续的空间做处理，只要移动堆指针就行。<br>  实际上在现在的虚拟机中，将这种算法应用在新生代。按照8：1：1的比例将内存分为三块，每次使用一块较大的与较小的其中一块，清理时将存活对象移到剩下的一块中，这样每次只会浪费10%的内存，由于新生代中的内存一般都是“朝生夕死”的，使用这种算法可以极大的提升效率。但是，不能保证每次清理时，剩下的一块空间能够存放所有的存活对象，所以这里会依赖其他内存空间（一般指老年代）进行分配担保（Handle Promotion）。</p>
+</li>
+<li><p>#####标记-整理算法（Mark-Compact）<br>  <img src="https://i.imgur.com/3v4hKEx.jpg" alt="Mark-Compact"><br>  复制算法在对象存活率较高时，效率就会变低，所以针对高对象存活率的情况，就有人提出了该算法。标记的过程并没有变化，但标记后并不是进行“清除”，而是将存活的对象向一端进行移动整理，然后清除掉其余的空间。现代虚拟机常将这种算法在老年代中使用。</p>
+</li>
+<li><p>#####分代收集算法（Generational Collection）<br>  分代收集算法是根据对象的存活时间，将内存划分几块（一般分为新生代和老年代），这样就可以根据不同的内存区域特点采用不同的算法。针对新生代，使用复制算法，用少量的内存空间换来更大的效率；针对老年代，使用标记-整理或标记-清除来处理。</p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+            <a href="/tags/笔记/" rel="tag"># 笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/01/JVM学习笔记-对象的创建过程/" rel="next" title="JVM学习笔记——对象的创建过程">
+                <i class="fa fa-chevron-left"></i> JVM学习笔记——对象的创建过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/03/JVM学习笔记-GC日志/" rel="prev" title="JVM学习笔记——GC日志">
+                JVM学习笔记——GC日志 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">薄枫</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bfsan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bfengsan@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC概述"><span class="nav-number">1.</span> <span class="nav-text">GC概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哪些内存需要回收"><span class="nav-number">1.0.1.</span> <span class="nav-text">哪些内存需要回收</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么时候回收（判断对象是否“死去”）"><span class="nav-number">1.0.2.</span> <span class="nav-text">什么时候回收（判断对象是否“死去”）</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">薄枫</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
